@@ -2,43 +2,42 @@ package Alien::Libarchive::MSWin32::ModuleBuild;
 
 use strict;
 use warnings;
-use Alien::CMake;
 use base qw( Alien::Base::ModuleBuild );
 
-sub new
+package
+  main;
+
+use Alien::CMake;
+use File::Which qw( which );
+
+sub _system
 {
-  my($class, %args) = @_;
-  
-  my $cmake = Alien::CMake->config('prefix') . '/bin/cmake.exe';
-  
-  foreach my $phase (grep /^alien_.*_commands$/ keys %args)
-  {
-    print "\n$phase:\n";    
-    for(@{ $args{$phase} })
-    {
-      # $cmake, location of CMAKE
-      s/\$cmake/$cmake/ge;
-      # $make, location of MAKE
-      s/\$make/$make/ge;
-      # $system, target platform
-      s/\$system/MinGW Makefiles/ge;
-      print "  $_\n";
-    }
-    print "\n";
-    
-  }
-  
-  $class->SUPER::new(%args);
+  my @cmd = @_;
+  print "> @cmd\n";
+  system @cmd;
+  die 'command failed' if $?;
 }
 
-sub libs
+sub alien_build ()
 {
-  '';
+  my $cmake  = Alien::CMake->config('prefix') . '/bin/cmake.exe';
+  my $make   = which('gmake') || which('make');
+  my $system = 'MinGW Makefiles';
+  _system $cmake, -G => $system, "-DCMAKE_MAKE_PROGRAM:PATH=$make", '.';
+  _system $make, 'archive';
 }
 
-sub cflags
+sub alien_install ()
 {
-  '';
+  my $dir = shift @ARGV;
+  print "> MD $dir\\lib\n";
+  mkdir "$dir/lib";
+  _system "copy", "bin\\libarchive.dll", "$dir\\lib\\libarchive.dll";
+  _system "copy", "libarchive\\libarchive.dll.a", "$dir\\lib\\libarchive.dll.a";
+  print "> MD $dir\\include\n";
+  mkdir "$dir/include";
+  _system "copy", "libarchive\\archive.h", "$dir\\include\\archive.h";
+  _system "copy", "libarchive\\archive_entry.h", "$dir\\include\\archive_entry.h";
 }
 
 1;
