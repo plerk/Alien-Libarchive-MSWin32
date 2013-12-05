@@ -39,6 +39,13 @@ If you lack the expertiese, contact me, I can probably help.
 
 =cut
 
+sub import
+{
+  my $class = shift;
+  $ENV{PATH} = dist_dir("Alien-Libarchive-MSWin32") . "/bin;$ENV{PATH}";
+  $class->SUPER::import(@_);
+}
+
 sub cflags
 {
   "-I" . dist_dir("Alien-Libarchive-MSWin32") . "/include";
@@ -47,6 +54,11 @@ sub cflags
 sub libs
 {
   "-L" . dist_dir("Alien-Libarchive-MSWin32") . "/lib -larchive";
+}
+
+sub dll_path
+{
+  dist_dir("Alien-Libarchive-MSWin32") . "bin/libarchive.dll";
 }
 
 1;
