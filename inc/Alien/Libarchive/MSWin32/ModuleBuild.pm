@@ -4,6 +4,34 @@ use strict;
 use warnings;
 use base qw( Alien::Base::ModuleBuild );
 
+my $cflags = '';
+my $libs   = '';
+  
+sub alien_do_commands
+{
+  my($self, $phase) = @_;
+
+  unless($cflags)
+  {
+    my $first = 1;
+    foreach my $name (qw( Alien::bz2 ))
+    {
+      my $alien = eval qq{ require $name; $name->new };
+      next if $@;
+      print "\n\n" if $first; $first = 0;
+      print "  trying to use $name\n";
+      $cflags .= ' ' . $alien->cflags;
+      $libs   .= ' ' . $alien->libs;
+    }
+    print "\n\n" unless $first;
+  }
+
+  local $ENV{CFLAGS} = $cflags;
+  local $ENV{LIBS}   = $libs;
+  
+  $self->SUPER::alien_do_commands($phase);
+}
+
 package
   main;
 
