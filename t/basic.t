@@ -2,9 +2,9 @@ use strict;
 use warnings;
 use Test::More tests => 1;
 use Test::CChecker;
-use Alien::Libarchive;
+use Alien::Libarchive::MSWin32;
 
-compile_with_alien 'Alien::Libarchive';
+compile_with_alien 'Alien::Libarchive::MSWin32';
 
 compile_output_to_note;
 

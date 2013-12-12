@@ -2,4 +2,5 @@ Alien::Base
 Alien::CMake
 Alien::bz2
 File::ShareDir
+Test::CChecker
 Test::More
