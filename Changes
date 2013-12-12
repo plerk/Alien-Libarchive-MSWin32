@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - fix dist_dir method
 
 0.01      2013-12-05 18:33:31 -0500
   - initial version

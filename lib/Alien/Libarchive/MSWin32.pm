@@ -3,7 +3,6 @@ package Alien::Libarchive::MSWin32;
 use strict;
 use warnings;
 use base qw( Alien::Base );
-use File::ShareDir qw( dist_dir );
 
 # ABSTRACT: Build and make available libarchive on MSWin32
 # VERSION
@@ -42,23 +41,30 @@ If you lack the expertise, contact me, I can probably help.
 sub import
 {
   my $class = shift;
-  $ENV{PATH} = dist_dir("Alien-Libarchive-MSWin32") . "/bin;$ENV{PATH}";
+  $ENV{PATH} = $class->dist_dir . "/bin;$ENV{PATH}";
   $class->SUPER::import(@_);
+}
+
+sub dist_dir
+{
+  my $dir = shift->SUPER::dist_dir;
+  $dir =~ s/\\/\//g;
+  $dir;
 }
 
 sub cflags
 {
-  "-I" . dist_dir("Alien-Libarchive-MSWin32") . "/include";
+  "-I" . shift->dist_dir . "/include";
 }
 
 sub libs
 {
-  "-L" . dist_dir("Alien-Libarchive-MSWin32") . "/lib -larchive";
+  "-L" . shift->dist_dir . "/lib -larchive";
 }
 
 sub dll_path
 {
-  dist_dir("Alien-Libarchive-MSWin32") . "bin/libarchive.dll";
+  shift->dist_dir . "/bin/libarchive.dll";
 }
 
 1;
