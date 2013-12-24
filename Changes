@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.02      2013-12-24 09:26:08 -0500
   - fix dist_dir method
 
 0.01      2013-12-05 18:33:31 -0500
