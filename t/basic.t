@@ -1,8 +1,11 @@
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More;
 use Test::CChecker;
 use Alien::Libarchive::MSWin32;
+
+plan skip_all => 'test is done in Alien::Libarchive';
+plan tests => 1;
 
 compile_with_alien 'Alien::Libarchive::MSWin32';
 
