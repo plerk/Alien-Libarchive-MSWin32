@@ -46,30 +46,34 @@ sub _system
   die 'command failed' if $?;
 }
 
+sub _make ()
+{
+  which('mingw32-make') || which('gmake') || which('make');
+}
+
+my $make;
+
 sub alien_build ()
 {
+  my $dir = shift @ARGV;
   my $cmake  = Alien::CMake->config('prefix') . '/bin/cmake.exe';
-  my $make   = which('gmake') || which('make');
+  $make   ||= _make();
   my $system = 'MinGW Makefiles';
-  _system $cmake, -G => $system, "-DCMAKE_MAKE_PROGRAM:PATH=$make", '.';
-  _system $make, 'archive';
-  _system $make, 'archive_static';
+  _system $cmake,
+    -G => $system,
+    "-DCMAKE_MAKE_PROGRAM:PATH=$make",
+    "-DCMAKE_INSTALL_PREFIX:PATH=$dir",
+    "-DENABLE_TEST=OFF",
+    "-DENABLE_TAR=OFF",
+    "-DENABLE_CPIO=OFF",
+    '.';
+  _system $make, 'all';
 }
 
 sub alien_install ()
 {
-  my $dir = shift @ARGV;
-  print "> MD $dir\\bin\n";
-  mkdir "$dir/bin";
-  _system "copy", "bin\\libarchive.dll", "$dir\\bin\\libarchive.dll";
-  print "> MD $dir\\lib\n";
-  mkdir "$dir/lib";
-  _system "copy", "libarchive\\libarchive_static.a", "$dir\\lib\\libarchive_static.a";
-  _system "copy", "libarchive\\libarchive.dll.a", "$dir\\lib\\libarchive.dll.a";
-  print "> MD $dir\\include\n";
-  mkdir "$dir/include";
-  _system "copy", "libarchive\\archive.h", "$dir\\include\\archive.h";
-  _system "copy", "libarchive\\archive_entry.h", "$dir\\include\\archive_entry.h";
+  $make   ||= _make();
+  _system $make, 'install';
 }
 
 1;

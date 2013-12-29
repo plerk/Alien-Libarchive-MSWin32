@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - use cmake's 'make install'
 
 0.02      2013-12-24 09:26:08 -0500
   - fix dist_dir method
