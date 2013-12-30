@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.03      2013-12-30 07:58:31 -0500
   - use cmake's 'make install'
   - require Alien::CMake 0.04 for a newer version of cmake (required by libarchive)
 
