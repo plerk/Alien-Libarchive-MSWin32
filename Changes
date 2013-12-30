@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
   - use cmake's 'make install'
+  - require Alien::CMake 0.04 for a newer version of cmake (required by libarchive)
 
 0.02      2013-12-24 09:26:08 -0500
   - fix dist_dir method
