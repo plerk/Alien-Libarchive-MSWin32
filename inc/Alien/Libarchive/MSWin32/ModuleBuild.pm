@@ -37,6 +37,7 @@ package
 
 use Alien::CMake;
 use File::Which qw( which );
+use Config;
 
 sub _system
 {
@@ -48,7 +49,14 @@ sub _system
 
 sub _make ()
 {
-  which('mingw32-make') || which('gmake') || which('make');
+  if($Config{make} =~ /nmake(\.exe)?$/)
+  {
+    return $Config{make};
+  }
+  else
+  {
+    return which('mingw32-make') || which('gmake') || which('make');
+  }
 }
 
 my $make;
@@ -58,7 +66,7 @@ sub alien_build ()
   my $dir = shift @ARGV;
   my $cmake  = Alien::CMake->config('prefix') . '/bin/cmake.exe';
   $make   ||= _make();
-  my $system = 'MinGW Makefiles';
+  my $system = $Config{make} =~ /nmake(\.exe)?$/ ? 'NMake Makefiles' : 'MinGW Makefiles';
   _system $cmake,
     -G => $system,
     "-DCMAKE_MAKE_PROGRAM:PATH=$make",
