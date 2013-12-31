@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.04      2013-12-31 09:31:57 -0500
+  - support for nmake
+  - support for Microsoft Visual Studio
+
 0.03      2013-12-30 07:58:31 -0500
   - use cmake's 'make install'
   - require Alien::CMake 0.04 for a newer version of cmake (required by libarchive)
