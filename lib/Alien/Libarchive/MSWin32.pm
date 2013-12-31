@@ -59,7 +59,18 @@ sub cflags
 
 sub libs
 {
-  "-L" . shift->dist_dir . "/lib -larchive";
+  my $self = shift;
+  if($self->config('msvs'))
+  {
+    require File::Spec;
+    my $path = File::Spec->catdir($self->dist_dir, "lib");
+    $path =~ s{\\}{/}g;
+    return join(' ', join(':', '-libpath', $path), 'archive.lib');
+  }
+  else
+  {
+    return "-L" . $self->dist_dir . "/lib -larchive";
+  }
 }
 
 sub dll_path

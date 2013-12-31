@@ -3,6 +3,7 @@ package Alien::Libarchive::MSWin32::ModuleBuild;
 use strict;
 use warnings;
 use base qw( Alien::Base::ModuleBuild );
+use Config;
 
 my $cflags = '';
 my $libs   = '';
@@ -28,6 +29,11 @@ sub alien_do_commands
 
   local $ENV{CFLAGS} = $cflags;
   local $ENV{LIBS}   = $libs;
+  
+  if($Config{ld} =~ /link(\.exe)?$/i)
+  {
+    $self->config_data( msvs => 1 );
+  }
   
   $self->SUPER::alien_do_commands($phase);
 }
