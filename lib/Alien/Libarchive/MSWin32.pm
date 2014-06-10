@@ -13,6 +13,18 @@ use base qw( Alien::Base );
 
 =head1 DESCRIPTION
 
+B<NOTE>: This version of Alien::Libarchive::MSWin32 has been deprecated in favor
+of a re-write which is hosted here:
+
+=over 4
+
+=item L<https://github.com/plicease/Alien-Libarchive2>
+
+=back
+
+B<NOTE2>: In this new version the MSWin32 version has been combined with
+the Unix version.
+
 This distribution downloads and installs libarchive for native (non-cygwin)
 Windows Perls.  You should not use this module directly, instead set
 your prerequisite to L<Alien::Libarchive>, which will work on non
